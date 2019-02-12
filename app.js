@@ -1,6 +1,34 @@
 const fs = require('fs');
 const os = require('os');
-const yargs = require('yargs').argv;
+
+const titleHolder = {
+      describe: 'Title of the note',
+      demand: true,
+      alias: 't',
+    };
+const bodyHolder = {
+      describe: 'Body of the note',
+      demand: true,
+      alias: 'b',
+    };
+    
+const yargs = require('yargs')
+  .command('add', 'Add a note',{
+    title: titleHolder,
+    body: bodyHolder,
+  })
+  .command('remove', 'Delete a note',{
+    title: titleHolder,
+  })
+  .command('update', 'Update a note',{
+    title: titleHolder,
+    body: bodyHolder,
+  })
+  .command('read', 'Read a note',{
+    title: titleHolder,
+  })
+  .help()
+  .argv;
 
 const note = require('./notes');
 
@@ -11,7 +39,6 @@ const log = (note) => {
    console.log(`Body: ${note.body}`);
 }
 const command = yargs._[0].toLowerCase();
-console.log('yArgs', yargs);
 
 if (command === 'add') {
   const newNote = note.addNote(yargs.title, yargs.body);
