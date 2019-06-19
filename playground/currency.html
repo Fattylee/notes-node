@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+     <script src="../../eruda/eruda.min.js"></script>
+     <script>eruda.init();</script>
+    <!--script ="../../eruda-code/eruda-code.min.js"></script>
+<script>eruda.add(erudaCode)</script>
+<script ="eruda-dom/eruda-dom.js"></script>
+<script>eruda.add(erudaDom)</script-->
+
+    <title>Mini App</title>
+
+    <style>
+      body{
+        background: #fff;
+        margin: 15px;
+      }
+      
+      .select{
+        margin-top:50px;
+      }
+      
+      .conversion{
+        margin:25px 0 25px 0;
+      }
+      
+      .btn{
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 14px 28px;
+        font-size: 30px;
+    }
+      
+    </style>
+  </head>
+  <body>
+    <h2>GanDollarz</h2>
+    <div class="select-currency select">
+      <select class="select-text">
+      	<option disabled selected>Choose Currency</option>
+      </select>
+    </div>
+    <button type="button" class="btn">How far</button>
+    <div class="conversion mdc-elevation--z3"></div>
+    <div class="messages">This is a message</div>
+
+    
+    <select id="mySel">
+      <option>List 1</option>
+    </select>
+
+    
+    <script>
+
+      const se = document.querySelector('#mySel');      
+console.log(se.options[0]);      const currencies = [{
+        id: 'USD', name: 'US Dollars'
+      }, {
+        id: 'UGX', name: 'Ugandan Shillings'
+      }, {
+        id: 'KES', name: 'Kenyan Shillings'
+      }, {
+        id: 'GHS', name: 'Ghanian Cedi'
+      }, {
+        id: 'ZAR', name: 'South African Rand'
+      }];
+      
+      const apiBase = 'https://free.currencyconverterapi.com/api/v6/';
+      const api = (currency) => `
+        ${apiBase}convert?q=${currency}_NGN&compact=ultra
+	  `;
+      
+      const toast = (msg) => {
+        const toastr = document.querySelector('.messages');
+        if(!toastr) return;
+        
+        toastr.textContent = msg;
+        if(!toastr.classList.contains('on')) {
+          toastr.classList.add('on');
+        }
+      };
+      
+      const doneToasting = () => {
+        const toastr = document.querySelector('.messages');
+        if(!toastr) return;
+        
+        toastr.textContent = '';
+        toastr.classList.remove('on');
+      };
+      
+      const conversionSucceeded = (apiResponse) => {
+        if(!apiResponse) {
+          toast(`nothing to display ...`);
+          return;
+        }
+        
+        const [value] = Object.values(apiResponse)
+        
+        const btn = document.querySelector('button');
+        btn.removeAttribute('disabled');
+        
+        const display = document.querySelector('.conversion');
+        const formatter = new Intl.NumberFormat(
+          'en-NG', { style: 'currency', currency: 'NGN' }
+        );
+        
+        display.textContent = formatter.format(value);
+        doneToasting();
+      };
+      
+      // declare populateCurrencies here      
+      
+      const getSelectedCurrency = () => {
+        // here, determine and return the selected value 
+        // of the SELECT element
+        const currency = document.querySelector('select.select-text').value;
+        if(!currencies.includes(currency)) return undefined;
+
+        return currency;
+      };
+            
+      const convert = (event) => {
+        toast(`preparing to convert ...`);
+        
+        const btn = event ? 
+              event.target : document.querySelector('button');
+        
+        const selected = getSelectedCurrency();
+        
+        if(!selected || selected.trim() === '' 
+           || !currencies.map(c => c.id).includes(selected)) return;
+        
+        btn.setAttribute('disabled', 'disabled');
+        toast(`converting ...`);
+        
+        const endpoint = api(selected);
+        
+        // make a GET fetch call to the endpoint
+        // variable declared above, convert the response to JSON,
+        // then call conversionSucceeded and pass the JSON data to it
+        
+      };
+      
+      const populateCurrencies = () => {
+        const option = document.createElement('option');
+        option.setAttribute('value', 'USD');
+        option.appendChild(document.createTextNode('US Dollars'));
+        document.querySelector('select.select-text').appendChild(option);
+        
+      };
+      
+      const startApp = () => {
+        // call populateCurrencies here
+         populateCurrencies()
+
+        
+        // add a click listener to the button here 
+        btn.addEventListener('click', convert);
+      };
+
+      startApp();
+      alert(33)
+    </script>
+  </body>
+</html>

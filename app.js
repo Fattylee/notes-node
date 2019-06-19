@@ -31,17 +31,12 @@ const yargs = require('yargs')
   .argv;
 
 const note = require('./notes');
+const {log} = require('./notes');
 
-const log = (note) => {
-   debugger;
-   console.log('-------------');
-   console.log(`Title: ${note.title}`);
-   console.log(`Body: ${note.body}`);
-}
 const command = yargs._[0].toLowerCase();
-
 if (command === 'add') {
-  const newNote = note.addNote(yargs.title, yargs.body);
+  console.log(yargs, 'yargs');
+  const newNote = note.addNote(yargs.t, yargs.b);
   if (newNote) {
      console.log('Note saved successfully');
      log(newNote);
@@ -49,18 +44,22 @@ if (command === 'add') {
 }
 else if (command === 'list') {
   const notes = note.listNote();
-  console.log(`There are ${notes.length} note(s)`);
+  console.log(`There ${notes.length > 1 ? 'are':'is'} ${notes.length} note${notes.length > 1 ? 's':''}`);
   notes.forEach(log);
 }
 else if (command === 'remove'){
-  const res = note.removeNote(yargs.title);
+  const res = note.removeNote(yargs.t);
   console.log( res ? 'Note was deleted' : 'Note not found');
 }
 else if (command === 'update') {
-  note.updateNote(yargs.title, yargs.body);
+   const updatedNote = note.updateNote(yargs.t, yargs.b);
+   if (updatedNote) {
+     console.log('Note updated successfully');
+     log(updatedNote);
+  }else { console.log('Note title not found'); }
 }
 else if (command === 'read') {
-  const filteredNote = note.getNote(yargs.title);
+  const filteredNote = note.getNote(yargs.t);
   if (!filteredNote) {
     console.log('Note not found');
   } else { 

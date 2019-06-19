@@ -1,0 +1,24 @@
+{
+  "name": "notes-node",
+  "version": "1.0.0",
+  "description": "note taking app using the command line interface",
+  "main": "app.js",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.2.0",
+    "request": "^2.88.0",
+    "yargs": "^12.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "todo",
+    "cli",
+    "note",
+    "jotter"
+  ],
+  "author": "fattylee",
+  "license": "ISC"
+}
